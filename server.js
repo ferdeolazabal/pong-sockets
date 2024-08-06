@@ -21,8 +21,20 @@ io.on("connection", (socket) => {
     console.log("Player ready =>", socket.id);
     readyPlayers++;
 
-    if (readyPlayers === 2) {
+    if (readyPlayers % 2 === 0) {
       io.emit("startGame", socket.id);
     }
+  });
+
+  socket.on("paddleMove", (data) => {
+    socket.broadcast.emit("paddleMove", data);
+  });
+
+  socket.on("ballMove", (data) => {
+    socket.broadcast.emit("ballMove", data);
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.log(`Client disconnected: ${socket.id} because ${reason}`);
   });
 });
